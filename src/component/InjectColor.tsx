@@ -1,15 +1,19 @@
-import React from 'react';
-import { View } from 'react-native';
-import { WebView } from 'react-native-webview';
+import React from "react";
+import { View } from "react-native";
+import { WebView } from "react-native-webview";
 
-const InjectColor = () => {
-  const script = `document.body.style.backgroundColor = 'lightblue';`;
+type Props = {
+  bgColor: string;
+};
+const InjectColor = (Props: Props) => {
+  const { bgColor } = Props;
+  const script = `document.body.style.backgroundColor = '${bgColor}';`;
 
   return (
     <View style={{ flex: 1 }}>
-      <WebView 
-        source={{ uri: 'https://www.google.com' }} 
-        injectedJavaScript={script} 
+      <WebView
+        source={{ uri: "https://www.google.com" }}
+        injectedJavaScript={script}
       />
     </View>
   );
