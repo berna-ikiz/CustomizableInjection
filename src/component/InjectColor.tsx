@@ -5,10 +5,11 @@ import { WebView } from "react-native-webview";
 type Props = {
   bgColor: string;
 };
+
 const InjectColor = (Props: Props) => {
   const { bgColor } = Props;
   const script = `document.body.style.backgroundColor = '${bgColor}';`;
-
+console.log(bgColor)
   return (
     <View style={{ flex: 1 }}>
       <WebView

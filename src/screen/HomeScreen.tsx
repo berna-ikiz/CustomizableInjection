@@ -1,10 +1,48 @@
-import { StyleSheet, Text, TextInput, TouchableOpacity, View } from "react-native";
+import {
+  Alert,
+  StyleSheet,
+  Text,
+  TextInput,
+  TouchableOpacity,
+  View,
+} from "react-native";
 import React, { useState } from "react";
 import InjectColor from "../component/InjectColor";
-import { WebView } from "react-native-webview";
+
+ // Renk formatını kontrol eden fonksiyon
+ const isValidColor = (color: string): boolean => {
+  const hexRegex = /^#([A-Fa-f0-9]{3}){1,2}$/;
+  
+  const rgbRegex = /^rgba?\(\s*\d{1,3}\s*,\s*\d{1,3}\s*,\s*\d{1,3}\s*(,\s*[01]?\d*\.?\d+\s*)?\)$/i;
+  
+  const cssColors = [
+    'red', 'green', 'blue', 'black', 'white', 
+    'tomato', 'lightblue', 'gold', 'pink', 'purple'
+  ];
+
+  return (
+    hexRegex.test(color) || 
+    rgbRegex.test(color) || 
+    cssColors.includes(color.toLowerCase())
+  );
+};
 
 const HomeScreen = () => {
-  const [displayColor,setDisplayColor] = useState('lightgray')
+  const [displayColor, setDisplayColor] = useState('');
+  const [colorInput, setColorInput] = useState('');
+
+  const handleColorChange = () => {
+    if (colorInput.trim()) {
+      console.log(!isValidColor(colorInput))
+      if (isValidColor(colorInput)) {
+      setDisplayColor(colorInput);
+      setColorInput('');
+      setDisplayColor(colorInput);
+      }else{
+        Alert.alert('please put a proper color')
+      }
+    }
+  };
   return (
     <View style={styles.container}>
       <View style={styles.colorInputsContainer}>
@@ -12,16 +50,20 @@ const HomeScreen = () => {
           <TextInput
             style={styles.input}
             placeholder="Please put a color exm: #fff or tomato"
+            onChangeText={setColorInput}
+            value={colorInput}
           />
           <TextInput
             style={[styles.inputShowColor, { backgroundColor: displayColor }]}
             editable={false}
           />
         </View>
-        <TouchableOpacity style={styles.button} activeOpacity={0.7}>
-          <Text style={styles.buttonText}>Change Color</Text>
-        </TouchableOpacity>
-        <InjectColor bgColor="#445d7a"/>
+      </View>
+      <TouchableOpacity style={styles.button} activeOpacity={0.7} onPress={handleColorChange}>
+        <Text style={styles.buttonText}>Change Color</Text>
+      </TouchableOpacity>
+      <View style={styles.webViewContainer}>
+        <InjectColor bgColor={displayColor} />
       </View>
     </View>
   );
@@ -48,8 +90,8 @@ const styles = StyleSheet.create({
     marginVertical: 10,
     fontSize: 20,
     backgroundColor: "lightgray",
-    fontWeight:'bold',
-    color:"#445d7a"
+    fontWeight: "bold",
+    color: "#445d7a",
   },
   inputShowColor: {
     flex: 1,
@@ -62,21 +104,25 @@ const styles = StyleSheet.create({
     fontSize: 20,
     backgroundColor: "lightgray",
   },
-  button:{
-     backgroundColor:"#445d7a",
-     paddingVertical:12,
-     borderRadius:5,
-     shadowColor:"gray",
-     shadowOffset:{width:0, height:2},
-     shadowOpacity:0.2,
-     shadowRadius:3,
-     elevation:3,
-     alignItems:'center',
-     marginHorizontal:60
+  button: {
+    backgroundColor: "#445d7a",
+    paddingVertical: 12,
+    borderRadius: 5,
+    shadowColor: "gray",
+    shadowOffset: { width: 0, height: 2 },
+    shadowOpacity: 0.2,
+    shadowRadius: 3,
+    elevation: 3,
+    alignItems: "center",
+    marginHorizontal: 60,
   },
-  buttonText:{
-    color:'white',
-    fontSize:18,
-    fontWeight:'bold',
-  }
+  buttonText: {
+    color: "white",
+    fontSize: 18,
+    fontWeight: "bold",
+  },
+  webViewContainer: {
+    flex: 1,
+    marginTop: 10,
+  },
 });
