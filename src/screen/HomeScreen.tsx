@@ -9,8 +9,8 @@ import {
 import React, { useState } from "react";
 import InjectColor from "../component/InjectColor";
 
- // Renk formatını kontrol eden fonksiyon
- const isValidColor = (color: string): boolean => {
+   // check colour input value
+  const isValidColor = (color: string): boolean => {
   const hexRegex = /^#([A-Fa-f0-9]{3}){1,2}$/;
   
   const rgbRegex = /^rgba?\(\s*\d{1,3}\s*,\s*\d{1,3}\s*,\s*\d{1,3}\s*(,\s*[01]?\d*\.?\d+\s*)?\)$/i;
@@ -32,12 +32,12 @@ const HomeScreen = () => {
   const [colorInput, setColorInput] = useState('');
 
   const handleColorChange = () => {
-    if (colorInput.trim()) {
-      console.log(!isValidColor(colorInput))
-      if (isValidColor(colorInput)) {
-      setDisplayColor(colorInput);
+    const colorText = colorInput.toLowerCase();
+    if (colorText.trim()) {
+      if (isValidColor(colorText)) {
+      setDisplayColor(colorText);
       setColorInput('');
-      setDisplayColor(colorInput);
+      setDisplayColor(colorText);
       }else{
         Alert.alert('please put a proper color')
       }
