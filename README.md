@@ -33,7 +33,7 @@ npx react-native run-ios
 2. Press the "Change Color" button
 3. See the WebView background update immediately.
 
-Code structure
+# Code structure
 ```
 /src
 ├── components
