@@ -6,40 +6,57 @@ import {
   TouchableOpacity,
   View,
 } from "react-native";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import InjectColor from "../component/InjectColor";
 
-   // check colour input value
-  const isValidColor = (color: string): boolean => {
+// check colour input value
+const isValidColor = (color: string): boolean => {
   const hexRegex = /^#([A-Fa-f0-9]{3}){1,2}$/;
-  
-  const rgbRegex = /^rgba?\(\s*\d{1,3}\s*,\s*\d{1,3}\s*,\s*\d{1,3}\s*(,\s*[01]?\d*\.?\d+\s*)?\)$/i;
-  
+
+  const rgbRegex =
+    /^rgba?\(\s*\d{1,3}\s*,\s*\d{1,3}\s*,\s*\d{1,3}\s*(,\s*[01]?\d*\.?\d+\s*)?\)$/i;
+
   const cssColors = [
-    'red', 'green', 'blue', 'black', 'white', 
-    'tomato', 'lightblue', 'gold', 'pink', 'purple'
+    "red",
+    "green",
+    "blue",
+    "black",
+    "white",
+    "tomato",
+    "lightblue",
+    "gold",
+    "pink",
+    "purple",
+    "yellow",
+    "orange",
+    "green",  
+    "gray"
   ];
 
   return (
-    hexRegex.test(color) || 
-    rgbRegex.test(color) || 
+    hexRegex.test(color) ||
+    rgbRegex.test(color) ||
     cssColors.includes(color.toLowerCase())
   );
 };
 
 const HomeScreen = () => {
-  const [displayColor, setDisplayColor] = useState('');
-  const [colorInput, setColorInput] = useState('');
+  const [displayColor, setDisplayColor] = useState("");
+  const [colorInput, setColorInput] = useState("");
+  const [webViewKey, setWebViewKey] = useState(0);
+
+  useEffect(() => {
+    setWebViewKey((prevKey) => prevKey + 1);
+  }, [displayColor]);
 
   const handleColorChange = () => {
     const colorText = colorInput.toLowerCase();
     if (colorText.trim()) {
       if (isValidColor(colorText)) {
-      setDisplayColor(colorText);
-      setColorInput('');
-      setDisplayColor(colorText);
-      }else{
-        Alert.alert('please put a proper color')
+        setDisplayColor(colorText);
+        setColorInput("");
+      } else {
+        Alert.alert("please put a proper color");
       }
     }
   };
@@ -52,6 +69,7 @@ const HomeScreen = () => {
             placeholder="Please put a color exm: #fff or tomato"
             onChangeText={setColorInput}
             value={colorInput}
+            maxLength={27}
           />
           <TextInput
             style={[styles.inputShowColor, { backgroundColor: displayColor }]}
@@ -59,11 +77,15 @@ const HomeScreen = () => {
           />
         </View>
       </View>
-      <TouchableOpacity style={styles.button} activeOpacity={0.7} onPress={handleColorChange}>
+      <TouchableOpacity
+        style={styles.button}
+        activeOpacity={0.7}
+        onPress={handleColorChange}
+      >
         <Text style={styles.buttonText}>Change Color</Text>
       </TouchableOpacity>
       <View style={styles.webViewContainer}>
-        <InjectColor bgColor={displayColor} />
+        <InjectColor bgColor={displayColor} key={webViewKey} />
       </View>
     </View>
   );
